@@ -1,0 +1,27 @@
+html, body, #map-canvas {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+#map-canvas img {
+    max-width: none;
+}
+body {
+    padding-top: 45px;
+/* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+.author-info {
+    display: block;
+}
+
+.author-info .author-photo {
+    float: left;
+    display: block;
+}
+
+.author-info .author-details {
+    float: left;
+    display: block;
+    margin-left: 10px;
+}
