@@ -10,6 +10,9 @@ sudo apt-get install python-django
 #Install mysqldb 
 sudo apt-get install python-mysqldb
 
+#Install beautiful-soup
+sudo apt-get install python-beautifulsoup
+
 #Create user for ResearchMap in Mysql
 see username and password at settings.py
 
