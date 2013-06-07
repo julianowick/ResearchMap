@@ -1,0 +1,29 @@
+#Install git
+sudo apt-get install git
+
+#Checkout ResearchMap
+git clone https://github.com/julianowick/ResearchMap.git
+
+#Install django framework
+sudo apt-get install python-django
+
+#Install mysqldb 
+sudo apt-get install python-mysqldb
+
+#Install beautiful-soup
+sudo apt-get install python-beautifulsoup
+
+#Create user for ResearchMap in Mysql
+see username and password at settings.py
+
+#Changing to directory
+cd ResearchMap
+
+#Create db
+python manage.py syncdb
+
+#Create cache table
+python manage.py createcachetable author_cache
+
+#Run server
+python manage.py runserver
