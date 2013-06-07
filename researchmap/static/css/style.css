@@ -24,4 +24,5 @@ body {
     float: left;
     display: block;
     margin-left: 10px;
+    max-width: 500px;
 }

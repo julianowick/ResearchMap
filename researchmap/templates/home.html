@@ -39,10 +39,12 @@
                     geocoder.geocode({ address: val['Affiliation']}, function(results, status){
                         console.log(results);
                         console.log(status);
+                        cur_author++;
+                        console.log(authors[cur_author-1]);
                         if (results == null) return;
             
                         $.each(results, function(key, val) {
-                            author = authors[cur_author]
+                            author = authors[cur_author-1]
                             var contentString = 
                                 '<div class="author-info">'+
                                 '<div class="author-photo"><img src="' + author.Photo + '"/></div>'+
@@ -50,7 +52,7 @@
                                 '<h2>' + author.Name + '</h2>'+
                                 '<p>' + author.Affiliation + '</p>';
                             if (author.Homepage != null){
-                                contentString += '<p>Homepage: <a href="'+ author.Homepage +'" target="_blank">' + author.Homepage + '</a></p>';
+                                contentString += '<p><a href="'+ author.Homepage +'" target="_blank">Homepage</a></p>';
                             }
                             contentString += 
                                 '<p><a href="'+ author.URL +'" target="_blank">Google Scholar</a></p>'+
@@ -69,7 +71,6 @@
                                 infowindow.open(map, marker);
                             });
                         });
-                        cur_author++;
                     });
                 });
             });

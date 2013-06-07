@@ -521,6 +521,6 @@ class ScholarAuthorParser(ScholarParser):
         asses = div.findAll("a")
         for a in asses:
             if a.get('class') == 'cit-dark-large-link':
-                self.author['homepage'] = a.get('href')
+                self.author['homepage'] = self._path2url(a.get('href'))
 
     
