@@ -511,7 +511,7 @@ class ScholarAuthorParser(ScholarParser):
                 if len(affil) == 1:
                     self.author['affiliation'] = affil[0].strip()
                 else:
-                    if len(affil[-1]) < 8:
+                    if len(affil[-1]) < 12:
                         self.author['affiliation'] = ', '.join([affil[-2].strip(), affil[-1].strip()])
                     else:
                         self.author['affiliation'] = affil[-1].strip()
