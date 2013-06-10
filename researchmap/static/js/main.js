@@ -1,4 +1,6 @@
 var map;
+var markers = [];
+var markerCluster;
 function initialize() {
     var mapOptions = {
         zoom: 2,
@@ -6,6 +8,8 @@ function initialize() {
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    var mcOptions = {gridSize: 50, maxZoom: 15};
+    markerCluster = new MarkerClusterer(map, markers, mcOptions);
 }
 google.maps.event.addDomListener(window, 'load', initialize);
 
@@ -37,11 +41,13 @@ function markAuthor(author){
             });
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(val['geometry']['location']['jb'], val['geometry']['location']['kb']),
-                map: map,
                 title: val['formatted_address'],
             //icon: val['icon']
             //    alert(val);
             });
+            markers.push(marker);
+            marker.setMap(map);
+            markerCluster.addMarker(marker);
             google.maps.event.addListener(marker, 'click', function() {
                 infowindow.open(map, marker);
             });
@@ -54,7 +60,7 @@ function searchMarker(){
             //alert(val['Affiliation']);
             markAuthor(val);
         });
-    });
+    });    
     return false;
 }
 
