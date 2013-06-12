@@ -7,8 +7,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'ResearchMap.researchmap.views.home', name='home'),
-    url(r'^markers/(?P<query>[\w ]+)$', 'ResearchMap.researchmap.views.markers', name='markers'), 
-    url(r'^scholar/(?P<query>[\w ]+)$', 'ResearchMap.researchmap.views.scholar', name='scholar'), 
+    url(r'^markers/$', 'ResearchMap.researchmap.views.markers', name='markers'), 
+    url(r'^search/$', 'ResearchMap.researchmap.views.search', name='search'), 
     # url(r'^ResearchMap/', include('ResearchMap.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

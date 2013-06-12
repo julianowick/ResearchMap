@@ -115,6 +115,14 @@ class Article():
         res.append(sep.join([unicode(self.attrs[key][0]) for key in keys]))
         return '\n'.join(res)
 
+    def as_obj(self):
+        # Get items sorted in specified order:
+        items = sorted(self.attrs.values(), key=lambda item: item[2])
+        out = {}
+        for item in items:
+            out[item[1]] = item[0]
+        return out
+
 class ScholarParser():
     """
     ScholarParser can parse HTML document strings obtained from Google
@@ -332,7 +340,11 @@ class ScholarQuerier():
     def add_article(self, art):
         self.articles.append(art)
 
-
+    def get_articles(self):
+        out = []
+        for art in self.articles:
+            out.append(art.as_obj())
+        return out
 
 def txt(query, author, count):
     querier = ScholarQuerier(author=author, count=count)

@@ -55,7 +55,7 @@ function markAuthor(author){
     });
 }
 function searchMarker(){
-    $.getJSON('scholar/' + $('#queryField').val(), function(data) {
+    $.getJSON('search/?q=' + $('#queryField').val(), function(data) {
         $.each(data, function(key, val) {
             //alert(val['Affiliation']);
             markAuthor(val);

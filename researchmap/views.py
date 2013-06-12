@@ -35,29 +35,37 @@ class SearchForm(forms.Form):
     s = forms.CharField(label = "Search for keyword")
     action = "/"    
     
-def markers(request, query):
+def markers(request):
+    query = request.GET.get('q')
     url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=' + query + '&sensor=true&key=AIzaSyCZMe3afa1hXz4v9_FzgQ6p2CrKeDGYVtQ'
     result = json.load(urllib.urlopen(url))    
     return HttpResponse(json.dumps(result['results']), mimetype='application/json')
 
-def scholar(request, query):
-    querier = ScholarQuerier(count=100, year_lo=2005, year_hi=2013)
+def search(request):
+    query = request.GET.get('q')
+    articles_obj = cache.get('q=' + query)
+    if articles_obj == None:
+        querier = ScholarQuerier(count=100, year_lo=2005, year_hi=2013)
+        querier.query(query)
+        articles = querier.get_articles()
+        # Caches query for one day
+        cache.set('q=' + query, json.dumps(articles, 86400))
+    else:
+        articles = json.loads(articles_obj)
+
     author_querier = ScholarAuthorParser()
-    querier.query(query)
-    articles = querier.articles
     out = []
-
     queried = []
-
     for art in articles:
         # Replace author information
-        for author in art['authors']:
+        for author in art['Authors']:
             if author['url'] not in queried:
                 author_obj = cache.get(author['url'])
                 if author_obj == None:
                     author_querier.query(author['url'])
                     author_obj = author_querier.author.as_obj()
-                    cache.set(author['url'], json.dumps(author_obj), 86400)
+                    # Caches author for one week
+                    cache.set(author['url'], json.dumps(author_obj), 604800)
                 else:
                     author_obj = json.loads(author_obj)
 
