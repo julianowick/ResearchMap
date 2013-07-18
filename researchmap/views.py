@@ -6,7 +6,7 @@ from django.template import loader, Context, RequestContext
 from django import forms
 from django.core.cache import cache
 from ResearchMap.researchmap.plugins.scholar import ScholarQuerier, ScholarAuthorParser
-
+from ResearchMap.researchmap.plugins.acm import ACMAuthorParser, ACMArticleParser
 
 def home(request):
     form = SearchForm(request.GET) # Filter form
@@ -53,17 +53,42 @@ def search(request):
     else:
         articles = json.loads(articles_obj)
 
-    author_querier = ScholarAuthorParser()
+    author_querier_scholar = ScholarAuthorParser()
+    author_querier_acm = ACMAuthorParser()
     out = []
     queried = []
     for art in articles:
+        # Find additional information from ACM
+        #if art['URL'].startswith('http://dl.acm.org/citation.cfm'):
+        #    article_querier = ACMArticleParser()
+        #    article_obj = cache.get(art['URL'])
+        #    if article_obj == None:
+        #        article_querier.query(art['URL'])
+        #        article_obj = article_querier.article.as_obj()
+        #        # Caches article for one week
+        #        cache.set(art['URL'], json.dumps(article_obj), 604800)
+        #    else:
+        #        article_obj = json.loads(article_obj)
+        #    
+        #    # Replace all authors 
+        #    # TODO: Implement a merge system
+        #    art['Authors'] = article_obj['Authors']
+
         # Replace author information
         for author in art['Authors']:
             if author['url'] not in queried:
                 author_obj = cache.get(author['url'])
                 if author_obj == None:
+                    if author['url'].startswith('http://dl.acm.org/author_page.cfm'):
+                        author_querier = author_querier_acm
+                    else:
+                        author_querier = author_querier_scholar
+
                     author_querier.query(author['url'])
                     author_obj = author_querier.author.as_obj()
+                    if author_obj['Name'] == None:
+                        author_obj['Name'] = author[author['name']]
+
                     # Caches author for one week
                     cache.set(author['url'], json.dumps(author_obj), 604800)
                 else:
